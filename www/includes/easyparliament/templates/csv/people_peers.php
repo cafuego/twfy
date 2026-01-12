@@ -36,7 +36,7 @@ function render_peers_row($peer, $order) {
   else {
     print $peer['party'];
   }
-  print ',' . 'http://' . DOMAIN . WEBPATH . 'senator/' .
+  print ',http://' . DOMAIN . WEBPATH . 'senator/' .
         make_member_url($name, $peer['constituency']);
   print "\n";
 }
