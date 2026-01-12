@@ -51,7 +51,7 @@ if (isset($data['rows'])) {
       $out[] = ['entry' => $entry, 'subs' => []];
     }
     else {
-      $out[sizeof($out) - 1]['subs'][] = $entry;
+      $out[count($out) - 1]['subs'][] = $entry;
     }
 
   }
