@@ -34,10 +34,12 @@ include_once INCLUDESPATH . 'dbtypes.php';
  */
 class COMMENTLIST {
 
+  private $db  = null;
+
   /**
    *
    */
-  public function COMMENTLIST() {
+  public function __construct() {
     global $this_page;
 
     $this->db = new ParlDB();

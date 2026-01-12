@@ -663,9 +663,13 @@ class PAGE
             // Generate the links for the top menu.
 
             // What gets displayed for this page.
-            $menudata = $DATA->page_metadata($toppage, 'menu');
+          $menudata = $DATA->page_metadata($toppage, 'menu');
+          if (!empty($menudata)) {
             $text = $menudata['text'];
             $title = $menudata['title'];
+          } else {
+            $text = $title = 'No menudata';
+          }
 
             // Where we're linking to.
             $URL = new URL($toppage);
@@ -840,8 +844,12 @@ class PAGE
 
         // The 'get involved' link.
         $menudata = $DATA->page_metadata('getinvolved', 'menu');
+        if (!empty($menudata)) {
         $getinvolvedtitle = $menudata['title'];
         $getinvolvedtext = $menudata['text'];
+        } else {
+          $getinvolvedtitle = $getinvolvedtext = 'No menudata';
+        }
 
         $GETINVURL = new URL('getinvolved');
         if ($this_page != 'getinvolved') {
@@ -910,9 +918,13 @@ class PAGE
             // User logged out.
 
             // The 'Join' link.
-            $menudata = $DATA->page_metadata('userjoin', 'menu');
+          $menudata = $DATA->page_metadata('userjoin', 'menu');
+          if (!empty($menudata)) {
             $jointext = $menudata['text'];
             $jointitle = $menudata['title'];
+        } else {
+          $jointitle = $jointext = 'No menudata';
+          }
 
             $JOINURL = new URL('userjoin');
             if ($this_page != 'userjoin') {
@@ -929,8 +941,12 @@ class PAGE
 
             // The 'Log in' link.
             $menudata = $DATA->page_metadata('userlogin', 'menu');
+            if (!empty($menudata)) {
             $logintext = $menudata['text'];
             $logintitle = $menudata['title'];
+            } else {
+              $logintext = $logintitle = 'No menudata';
+        }
 
             $LOGINURL = new URL('userlogin');
             if ($this_page != 'userlogin') {

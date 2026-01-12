@@ -48,6 +48,8 @@ include_once INCLUDESPATH . "easyparliament/searchlog.php";
  */
 class HANSARDLIST {
 
+  private $db = null;
+
   // We add 'wrans' or 'debate' onto the end of this in the appropriate classes'
   // constructors.
   // If you change this, change it in COMMENTSLIST->_fix_gid() too!
@@ -115,7 +117,7 @@ class HANSARDLIST {
   /**
    *
    */
-  public function HANSARDLIST() {
+  public function __construct() {
     $this->db = new ParlDB();
   }
 
