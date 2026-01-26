@@ -149,7 +149,7 @@ if (get_http_var("submitted") == "true") {
     // and the values will be text to display when we show the form again.
     $errors = check_input($details);
 
-    if (sizeof($errors) > 0) {
+    if (count($errors) > 0) {
         // Validation errors. Print form again.
 
         $PAGE->page_start();
@@ -1017,7 +1017,7 @@ function display_user($user_id = "")
 
         if (isset($registrationtime)) {
             // Make registration time more user-friendly.
-            list($date, $time) = explode(' ', $registrationtime);
+            [$date, $time] = explode(' ', $registrationtime);
             $registrationtime = format_date($date, LONGDATEFORMAT);
         }
 
