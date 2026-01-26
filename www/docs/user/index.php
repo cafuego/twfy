@@ -1162,10 +1162,10 @@ function display_user($user_id = "")
                         if (count($search_keywords) > 0) {
                             if (strpos($search_url, 'pid=') !== false)
                                 $search_url .= '&';
-                            $search_url .= "s=" . join("+", $search_keywords);
+                            $search_url .= "s=" . implode("+", $search_keywords);
                         }
 
-                        $display_criteria = join(' ', $display_terms);
+                        $display_criteria = implode(' ', $display_terms);
                         $token = $row['alert_id'] . '-' . $row['registrationtoken'];
                         if (!$row['confirmed']) {
                             $action = '<a href="' . WEBPATH . 'A/' . $token . '">Confirm</a>';
