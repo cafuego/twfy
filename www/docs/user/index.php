@@ -215,7 +215,7 @@ else {
             // So set up a new user object with the id supplied
             // and get the user's info.
 
-            $USER = new USER;
+            $USER = new USER();
             $USER->init(get_http_var("u"));
 
             $details = [];
@@ -284,7 +284,7 @@ function check_input($details)
     }
     else {
 
-        $USER = new USER;
+        $USER = new USER();
         $id_of_user_with_this_addresss = $USER->email_exists($details["email"]);
 
         if (
@@ -772,7 +772,7 @@ function display_form($details = [], $errors = [])
                 <span class="label">Security status:</span>
                 <span class="formw"><select name="status">
                         <?php
-                        $USER = new USER;
+                        $USER = new USER();
                         $statuses = $USER->possible_statuses();
                         foreach ($statuses as $n => $status) {
                             print "\t<option value=\"$status\"";
@@ -944,7 +944,7 @@ function display_user($user_id = "")
 
         // Viewing someone else's info.
 
-        $USER = new USER;
+        $USER = new USER();
         $valid = $USER->init($user_id);
 
         if ($valid && $USER->confirmed() && !$USER->deleted()) {
@@ -1138,7 +1138,7 @@ function display_user($user_id = "")
                 if ($this_page == 'userviewself') {
                     $PAGE->stripe_start();
                     print '<h3>Your email alerts</h3>';
-                    $db = new ParlDB;
+                    $db = new ParlDB();
                     $q = $db->query('SELECT * FROM alerts WHERE email = "' . mysqli_real_escape_string($db, $THEUSER->email()) . '" ORDER BY confirmed,deleted,alert_id');
                     $out = '';
                     for ($i = 0; $i < $q->rows(); ++$i) {
