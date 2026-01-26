@@ -98,7 +98,7 @@ if (get_http_var("submitted") == "true") {
     // The edit or join form has been submitted, so check input.
 
     // Put all the user-submitted data in an array.
-    $details = array();
+    $details = [];
     $details["firstname"] = trim(get_http_var("firstname"));
     $details["lastname"] = trim(get_http_var("lastname"));
     $details["email"] = trim(get_http_var("em"));
@@ -184,7 +184,7 @@ if (get_http_var("submitted") == "true") {
         if ($this_page == "useredit") {
 
             // We're editing THEUSER's own info, so set all the vars.
-            $details = array();
+            $details = [];
             $details["firstname"] = $THEUSER->firstname();
             $details["lastname"] = $THEUSER->lastname();
             $details["email"] = $THEUSER->email();
@@ -208,7 +208,7 @@ if (get_http_var("submitted") == "true") {
             $USER = new USER;
             $USER->init(get_http_var("u"));
 
-            $details = array();
+            $details = [];
 
             $details["user_id"] = $USER->user_id();
             $details["firstname"] = $USER->firstname();
@@ -250,7 +250,7 @@ function check_input($details)
     // wanted to join.
     $ret = get_http_var("ret");
 
-    $errors = array();
+    $errors = [];
 
     // Check each of the things the user has input.
     // If there is a problem with any of them, set an entry in the $errors array.
@@ -372,10 +372,10 @@ function add_user($details)
 
         $PAGE->stripe_start();
 
-        $message = array(
+        $message = [
             'title' => "We're nearly done...",
             'text' => "You should receive an email shortly which will contain a link. You will need to follow that link to confirm your email address before you can log in. Thanks."
-        );
+        ];
 
         $PAGE->message($message);
 
@@ -417,7 +417,7 @@ function add_user($details)
                     // We'll send the user to the front page after they've joined.
 
                     $URL = new URL("home");
-                    $URL->insert(array("newuser"=>"1"));
+                    $URL->insert(["newuser"=>"1"]);
                     $url = $URL->generate();
                 }
 
@@ -504,7 +504,7 @@ function update_user($details)
 
 
 
-function display_form($details = array(), $errors = array())
+function display_form($details = [], $errors = [])
 {
     global $this_page, $THEUSER, $who, $PAGE;
 
@@ -843,12 +843,12 @@ function display_form($details = array(), $errors = array())
 
     if ($this_page == 'userjoin') {
 
-        $PAGE->stripe_end(array(
-            array(
+        $PAGE->stripe_end([
+            [
                 'type' => 'include',
                 'content' => 'userjoin'
-            )
-        ));
+            ]
+        ]);
 
     } else {
         $PAGE->stripe_end();
@@ -912,7 +912,7 @@ function display_user($user_id = "")
     } else {
         // Nothing to show!
         $URL = new URL('userlogin');
-        $URL->insert(array('ret' => '/user/'));
+        $URL->insert(['ret' => '/user/']);
         $loginurl = $URL->generate();
         header("Location: $loginurl");
         exit;
@@ -1121,12 +1121,12 @@ function display_user($user_id = "")
                     for ($i = 0; $i < $q->rows(); ++$i) {
                         $row = $q->row($i);
                         $alert_criteria_terms = explode(' ', $row['criteria']);
-                        $display_terms = array();
-                        $search_keywords = array();
+                        $display_terms = [];
+                        $search_keywords = [];
                         $search_url = WEBPATH . "search/?";
                         foreach ($alert_criteria_terms as $criteria_term) {
                             if (preg_match('#^speaker:(\d+)#', $criteria_term, $m)) {
-                                $MEMBER = new MEMBER(array('person_id' => $m[1]));
+                                $MEMBER = new MEMBER(['person_id' => $m[1]]);
                                 $display_terms[] = 'spoken by ' . $MEMBER->full_name();
                                 $search_url .= 'pid=' . $MEMBER->person_id();
                             } else {
@@ -1164,33 +1164,28 @@ function display_user($user_id = "")
 
                 if (!$edited) {
 
-                    $args = array(
+                    $args = [
                         'user_id' => $user_id,
                         'page' => get_http_var('p')
-                    );
+                    ];
 
                     $COMMENTLIST = new COMMENTLIST();
 
                     $COMMENTLIST->display('user', $args);
                 }
 
-    } else {
+    }
+    else {
 
-        $message = array(
+        $message = [
             'title' => 'Sorry...',
             'text' => "We don't have a user ID, so we can't show you anyone's details."
-        );
+        ];
 
         $PAGE->message($message);
 
     }
 
-
-
     $PAGE->page_end();
 
-
 } // end display_user()
-
-
-?>
