@@ -23,11 +23,11 @@
     After the first part of working out which page we're on, and munging any data
         various functions in this file are used:
 
-        check_input()	Validates the edited or added user data and creates error messages.
-        add_user()		Calls $THEUSER->add() and displays the results, depending on success.
-        update_user()	Calls the appropriate functions and updates, displays results.
-        display_form()	Displays the form for editing or adding a user.
-        display_user()	Displays a user's details.
+        check_input()    Validates the edited or added user data and creates error messages.
+        add_user()        Calls $THEUSER->add() and displays the results, depending on success.
+        update_user()    Calls the appropriate functions and updates, displays results.
+        display_form()    Displays the form for editing or adding a user.
+        display_user()    Displays a user's details.
 
 */
 
@@ -39,12 +39,12 @@ include_once "../../includes/easyparliament/member.php";
 // Which page we're on all depends on the value of the "pg" variable...
 switch (get_http_var("pg")) {
 
-    case "join":	// A new user signing up.
+    case "join":    // A new user signing up.
 
         $this_page = "userjoin";
         break;
 
-    case "editother":	// Editing someone else's info.
+    case "editother":    // Editing someone else's info.
 
         // We need a user_id. So make sure that exists.
         // And make sure the user is allowed to do this!
@@ -62,7 +62,7 @@ switch (get_http_var("pg")) {
 
         break;
 
-    case "edit":	// Edit this user's owninfo.
+    case "edit":    // Edit this user's owninfo.
 
         if ($THEUSER->isloggedin()) {
             $this_page = "useredit";
@@ -392,7 +392,7 @@ function add_user($details)
 
         $PAGE->stripe_end();
 
-        /*		We used to log the user in straight away.
+        /*        We used to log the user in straight away.
                 Now we send them a confirmation email.
 
                 Keeping this code here, just in case.
@@ -882,11 +882,11 @@ function display_user($user_id = "")
 
 
     // We're either going to be:
-    //	Displaying the details of a user who's just been edited
-    //		(their user_id will be in $user_id now).
-    //	Viewing THEUSER's own data.
-    //	Viewing someone else's data (their id will be in the GET string
-    //		user_id variable).
+    //    Displaying the details of a user who's just been edited
+    //        (their user_id will be in $user_id now).
+    //    Viewing THEUSER's own data.
+    //    Viewing someone else's data (their id will be in the GET string
+    //        user_id variable).
 
 
     // We could do something cleverer so that if THEUSER has sufficient
@@ -900,7 +900,7 @@ function display_user($user_id = "")
 
     // FIRST: Work out whose info we're going to show.
 
-    $edited = false; 	// Have we just edited someone's info?
+    $edited = false;     // Have we just edited someone's info?
 
     if (is_numeric($user_id) && $user_id == $THEUSER->user_id()) {
         // Display this user's just edited info.
