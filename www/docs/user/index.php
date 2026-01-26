@@ -105,15 +105,15 @@ if (get_http_var("submitted") == "true") {
     $details["firstname"] = trim(get_http_var("firstname"));
     $details["lastname"] = trim(get_http_var("lastname"));
     $details["email"] = trim(get_http_var("em"));
-    // We use boolean true/false internally. Convert the text from the form to boolean.
-    $details["emailpublic"] = get_http_var("emailpublic") == "true" ? true : false;
+    // We use boolean TRUE/FALSE internally. Convert the text from the form to boolean.
+    $details["emailpublic"] = get_http_var("emailpublic") == "true" ? TRUE : FALSE;
     $details["password"] = trim(get_http_var("password"));
     $details["password2"] = trim(get_http_var("password2"));
-    $details["optin"] = get_http_var("optin") == "true" ? true : false;
-    $details['mp_alert'] = get_http_var('mp_alert') == 'true' ? true : false;
+    $details["optin"] = get_http_var("optin") == "true" ? TRUE : FALSE;
+    $details['mp_alert'] = get_http_var('mp_alert') == 'true' ? TRUE : FALSE;
     if (get_http_var("remember") != "") {
         $remember = get_http_var("remember");
-        $details["remember"] = $remember[0] == "true" ? true : false;
+        $details["remember"] = $remember[0] == "true" ? TRUE : FALSE;
     }
 
     $details["constituency"] = trim(get_http_var("constituency"));
@@ -127,17 +127,17 @@ if (get_http_var("submitted") == "true") {
         $details["status"] = trim(get_http_var("status"));
         if (get_http_var("deleted") != "") {
             $deleted = get_http_var("deleted");
-            $details["deleted"] = $deleted[0] == "true" ? true : false;
+            $details["deleted"] = $deleted[0] == "true" ? TRUE : FALSE;
         }
         else {
-            $details['deleted'] = false;
+            $details['deleted'] = FALSE;
         }
         if (get_http_var("confirmed") != "") {
             $confirmed = get_http_var("confirmed");
-            $details["confirmed"] = $confirmed[0] == "true" ? true : false;
+            $details["confirmed"] = $confirmed[0] == "true" ? TRUE : FALSE;
         }
         else {
-            $details['confirmed'] = false;
+            $details['confirmed'] = FALSE;
         }
     }
 
@@ -678,7 +678,7 @@ function display_form($details = [], $errors = [])
         <div class="row">
             <span class="label">&nbsp;</span>
             <span class="formw"><input type="radio" name="emailpublic" id="emailpublictrue" value="true" <?php
-            if (isset($details["emailpublic"]) && $details["emailpublic"] == true) {
+            if (isset($details["emailpublic"]) && $details["emailpublic"] == TRUE) {
                 print " checked";
             }
             ?>> <label
@@ -687,7 +687,7 @@ function display_form($details = [], $errors = [])
                 if (
                     ($this_page == "userjoin" && get_http_var("submitted") != "true")
                     ||
-                    (isset($details["emailpublic"]) && $details["emailpublic"] == false)
+                    (isset($details["emailpublic"]) && $details["emailpublic"] == FALSE)
                 ) {
                     print " checked";
                 }
@@ -714,7 +714,7 @@ function display_form($details = [], $errors = [])
         <div class="row">
             <span class="label">&nbsp;</span>
             <span class="formw"><input type="radio" name="optin" id="optintrue" value="true" <?php
-            if (isset($details["optin"]) && $details["optin"] == true) {
+            if (isset($details["optin"]) && $details["optin"] == TRUE) {
                 print " checked";
             }
             ?>> <label
@@ -723,7 +723,7 @@ function display_form($details = [], $errors = [])
                 if (
                     ($this_page == "userjoin" && get_http_var("submitted") != "true")
                     ||
-                    (isset($details["optin"]) && $details["optin"] == false)
+                    (isset($details["optin"]) && $details["optin"] == FALSE)
                 ) {
                     print " checked";
                 }
@@ -745,7 +745,7 @@ function display_form($details = [], $errors = [])
             <div class="row">
                 <span class="label">&nbsp;</span>
                 <span class="formw"><input type="radio" name="mp_alert" id="mp_alerttrue" value="true" <?php
-                if (isset($details["mp_alert"]) && $details["mp_alert"] == true) {
+                if (isset($details["mp_alert"]) && $details["mp_alert"] == TRUE) {
                     print ' checked';
                 }
                 ?>> <label
@@ -754,7 +754,7 @@ function display_form($details = [], $errors = [])
                     if (
                         ($this_page == "userjoin" && get_http_var("submitted") != "true")
                         ||
-                        (isset($details["mp_alert"]) && $details["mp_alert"] == false)
+                        (isset($details["mp_alert"]) && $details["mp_alert"] == FALSE)
                     ) {
                         print ' checked';
                     }
@@ -788,7 +788,7 @@ function display_form($details = [], $errors = [])
             <div class="row">
                 <span class="label"><label for="confirmed">Confirmed?</label></span>
                 <span class="formw"><input type="checkbox" name="confirmed[]" id="confirmed" value="true" <?php
-                if (isset($details["confirmed"]) && $details["confirmed"] == true) {
+                if (isset($details["confirmed"]) && $details["confirmed"] == TRUE) {
                     print " checked";
                 }
                 ?>></span>
@@ -797,7 +797,7 @@ function display_form($details = [], $errors = [])
             <div class="row">
                 <span class="label"><label for="deleted">"Deleted"?</label></span>
                 <span class="formw"><input type="checkbox" name="deleted[]" id="deleted" value="true" <?php
-                if (isset($details["deleted"]) && $details["deleted"] == true) {
+                if (isset($details["deleted"]) && $details["deleted"] == TRUE) {
                     print " checked";
                 }
                 ?>> <small>(No data will
@@ -900,18 +900,18 @@ function display_user($user_id = "")
 
     // FIRST: Work out whose info we're going to show.
 
-    $edited = false;     // Have we just edited someone's info?
+    $edited = FALSE;     // Have we just edited someone's info?
 
     if (is_numeric($user_id) && $user_id == $THEUSER->user_id()) {
         // Display this user's just edited info.
         $display = "this user";
-        $edited = true;
+        $edited = TRUE;
 
     }
     elseif (is_numeric($user_id)) {
         // Display someone else's just edited info.
         $display = "another user";
-        $edited = true;
+        $edited = TRUE;
 
     }
     elseif (is_numeric(get_http_var("u"))) {
@@ -953,7 +953,7 @@ function display_user($user_id = "")
             $name = $USER->firstname() . " " . $USER->lastname();
             $url = $USER->url();
 
-            if ($USER->emailpublic() == true) {
+            if ($USER->emailpublic() == TRUE) {
                 $email = $USER->email();
             }
 
@@ -979,8 +979,8 @@ function display_user($user_id = "")
         if ($edited) {
             // We want to show all the info to the user.
             $email = $THEUSER->email();
-            $emailpublic = $THEUSER->emailpublic() == true ? "Yes" : "No";
-            $optin = $THEUSER->optin() == true ? "Yes" : "No";
+            $emailpublic = $THEUSER->emailpublic() == TRUE ? "Yes" : "No";
+            $optin = $THEUSER->optin() == TRUE ? "Yes" : "No";
             $constituency = $THEUSER->constituency();
         }
         else {
@@ -1160,7 +1160,7 @@ function display_user($user_id = "")
                         }
 
                         if (count($search_keywords) > 0) {
-                            if (strpos($search_url, 'pid=') !== false)
+                            if (strpos($search_url, 'pid=') !== FALSE)
                                 $search_url .= '&';
                             $search_url .= "s=" . implode("+", $search_keywords);
                         }
