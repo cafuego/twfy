@@ -66,7 +66,7 @@ class SEARCHENGINE {
      */
     public function __construct($query) {
         if (!defined('XAPIANDB') || !XAPIANDB) {
-            return NULL;
+            return;
         }
 
         $this->query = $query;
@@ -91,15 +91,15 @@ class SEARCHENGINE {
 
         // Split words up into individual words, and quoted phrases.
         preg_match_all('/(' .
-          // Match either a quote, or...
-          '"|' .
-          // Optionally a - (exclude)
-          '(?:(?<![' . $this->wordchars . '])-)?' .
-          // If at start of word (i.e. not preceded by a word character, in
-          // which case it is probably a hyphenated-word)
-          // followed by a string of word-characters.
-          '[' . $this->wordchars . ']+' .
-          ')/', $query, $all_words);
+            // Match either a quote, or...
+            '"|' .
+            // Optionally a - (exclude)
+            '(?:(?<![' . $this->wordchars . '])-)?' .
+            // If at start of word (i.e. not preceded by a word character, in
+            // which case it is probably a hyphenated-word)
+            // followed by a string of word-characters.
+            '[' . $this->wordchars . ']+' .
+            ')/', $query, $all_words);
         if ($all_words) {
             $all_words = $all_words[0];
         }
@@ -120,7 +120,7 @@ class SEARCHENGINE {
             }
 
             if (strpos($word, ':') !== FALSE) {
-                $items = split(":", strtolower($word));
+                $items = explode(":", strtolower($word));
                 $type = $items[0];
                 $value = join(":", array_slice($items, 1));
                 if ($type == "section") {
@@ -462,13 +462,14 @@ else {
         switch ($sort_order) {
             case 'date':
                 $this->enquire->set_sort_by_value_then_relevance(0, TRUE);
-              break;
+                break;
 
             case 'created':
                 $this->enquire->set_sort_by_value_then_relevance(6, TRUE);
+                break;
             default:
                 // Do nothing, default ordering is by relevance.
-              break;
+                break;
         }
         $matches = $this->enquire->get_mset($first_result, $results_per_page);
         $this->gids = [];

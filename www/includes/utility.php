@@ -123,7 +123,15 @@ function error_handler(string $errno, string $errmsg, string $filename, int $lin
     if (count($_POST)) {
         $err .= "_POST:";
         foreach ($_POST as $k => $v) {
-            $err .= "\t\t$k => $v\n";
+            if (is_scalar($v) || $v === NULL) {
+                $value = (string) $v;
+            } else {
+                $value = json_encode($v);
+                if ($value === FALSE) {
+                    $value = print_r($v, TRUE);
+                }
+            }
+            $err .= "\t\t$k => $value\n";
         }
     }
 
@@ -160,19 +168,18 @@ function error_handler(string $errno, string $errmsg, string $filename, int $lin
 
     if (DEVSITE) {
         // On a devsite we just display the problem.
-        // $message = array(
-        //     'title' => "Error",
-        //     'text' => "$err\n"
-        // );
-        // if (is_object($PAGE)) {
-        //     $PAGE->error_message($message, $fatal);
-        //     vardump(adodb_backtrace());
-        // } else {
-        //     vardump($message);
-        //     vardump(adodb_backtrace());
-        // }
-    }
-    else {
+        $message = [
+            'title' => "Error",
+            'text' => "$err\n"
+        ];
+        if (is_object($PAGE)) {
+            $PAGE->error_message($message, $fatal);
+            vardump(adodb_backtrace());
+        } else {
+            vardump($message);
+            vardump(adodb_backtrace());
+        }
+    } else {
         print ("<pre>" . htmlentities_notags($err) . "</pre>");
         // On live sites we display a nice message and email the problem.
         error_log($err);
@@ -889,7 +896,7 @@ function get_http_var($name, $default = '') {
  *
  */
 function clean_var($a) {
-    return (ini_get("magic_quotes_gpc") == 1) ? recursive_strip($a) : $a;
+    return $a;
 }
 
 /**
@@ -897,7 +904,7 @@ function clean_var($a) {
  */
 function recursive_strip($a) {
     if (is_array($a)) {
-        while ([$key, $val] = each($a)) {
+        foreach ($a as $key => $val) {
             $a[$key] = recursive_strip($val);
         }
     }
@@ -934,18 +941,6 @@ function hidden_form_vars($omit = []) {
     }
 }
 
-/**
- * Deprecated. Use hidden_form_vars, above, instead.
- */
-function hidden_vars($omit = []) {
-    global $DATA;
-
-    foreach ($args as $key => $val) {
-        if (!in_array($key, $omit)) {
-            print "<input type=\"hidden\" name=\"$key\" value=\"" . htmlspecialchars($val) . "\">\n";
-        }
-    }
-}
 
 /**
  *

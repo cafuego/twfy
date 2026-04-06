@@ -10,22 +10,22 @@
 
 /* What happens?
 
-    1) We check what $this_page is going to be. This depends on:
-        * the value of $pg, if anything;
-        * whether $THEUSER is logged in or not;
-        * whether $THEUSER has appropriate security privileges;
-        * and whether we've been passed the ID of a user to view/edit.
+1) We check what $this_page is going to be. This depends on:
+ * the value of $pg, if anything;
+ * whether $THEUSER is logged in or not;
+ * whether $THEUSER has appropriate security privileges;
+ * and whether we've been passed the ID of a user to view/edit.
 
-    2) If we've come to this page after submitting its form, we check the form data.
-        If the data is OK, we either edit or add the user and display the new info.
-        If there were errors, the same form is displayed again with error messages.
+2) If we've come to this page after submitting its form, we check the form data.
+If the data is OK, we either edit or add the user and display the new info.
+If there were errors, the same form is displayed again with error messages.
 
-    3) On the other hand, if the form hasn't been submitted we've just arrived here.
-        In that case the form (or the user info, if just viewing) is displayed.
+3) On the other hand, if the form hasn't been submitted we've just arrived here.
+In that case the form (or the user info, if just viewing) is displayed.
 
 
-    After the first part of working out which page we're on, and munging any data
-        various functions in this file are used:
+After the first part of working out which page we're on, and munging any data
+various functions in this file are used:
 
         check_input()    Validates the edited or added user data and creates error messages.
         add_user()        Calls $THEUSER->add() and displays the results, depending on success.
@@ -33,7 +33,7 @@
         display_form()    Displays the form for editing or adding a user.
         display_user()    Displays a user's details.
 
-*/
+ */
 
 include_once "../../includes/easyparliament/init.php";
 include_once "../../includes/easyparliament/member.php";
@@ -44,7 +44,7 @@ switch (get_http_var("pg")) {
     case "join":
         // A new user signing up.
         $this_page = "userjoin";
-        break;
+      break;
 
     case "editother":
         // Editing someone else's info.
@@ -63,7 +63,7 @@ switch (get_http_var("pg")) {
 
         }
 
-        break;
+      break;
 
     case "edit":
         // Edit this user's owninfo.
@@ -78,7 +78,7 @@ switch (get_http_var("pg")) {
             $this_page = "userjoin";
 
         }
-        break;
+      break;
 
     default:
 
@@ -378,37 +378,24 @@ function add_user($details) {
         /*        We used to log the user in straight away.
                 Now we send them a confirmation email.
 
-                Keeping this code here, just in case.
-                Note that you'll probably have to add the 'remember' checkbox
-                back into the sign-up form.
+        Keeping this code here, just in case.
+        Note that you'll probably have to add the 'remember' checkbox
+        back into the sign-up form.
 
 
-                // Does this user want to a long-term cookie?
-                if (isset($details["remember"]) && $details["remember"]) {
-                    $expire = "never";
-                } else {
-                    $expire ="session";
-                }
+        // Does this user want to a long-term cookie?
+        if (isset($details["remember"]) && $details["remember"]) {
+        $expire = "never";
+        } else {
+        $expire ="session";
+        }
 
-                // Wherever the user ends up next, we'll display a welcome message to them
-                // indicated by the 'newuser' element in the URL....
+        // Wherever the user ends up next, we'll display a welcome message to them
+        // indicated by the 'newuser' element in the URL....
 
-                // $ret might be a URL that will take the user back to where they
-                // where before joining.
-                if (get_http_var("ret") != "") {
-
-                    $url = get_http_var("ret");
-                    // We're now going to have to fudge things a bit. Want to add "newuser=1"
-                    // on to the end of wherever we were before, so a welcome message will
-                    // be displayed.
-                    if (preg_match("/\?.+/", $url)) {
-                        $url .= "&newuser=1";
-                    } else {
-                        $url .= "?newuser=1";
-                    }
-
-                } else {
-                    // We'll send the user to the front page after they've joined.
+        // $ret might be a URL that will take the user back to where they
+        // where before joining.
+        if (get_http_var("ret") != "") {
 
                     $URL = new URL("home");
                     $URL->insert(["newuser"=>"1"]);
@@ -544,11 +531,9 @@ function display_form($details = [], $errors = []) {
         ?>
         <div class="row">
             <span class="label"><label for="firstname">Your first name:</label></span>
-            <span class="formw"><input type="text" name="firstname" id="firstname"
-                    value="<?php if (isset($details["firstname"])) {
-                        echo htmlentities($details["firstname"]);
-                    } ?>"
-                    maxlength="255" size="30" class="form"></span>
+            <span class="formw"><input type="text" name="firstname" id="firstname" value="<?php if (isset($details["firstname"])) {
+                echo htmlentities($details["firstname"]);
+} ?>" maxlength="255" size="30" class="form"></span>
         </div>
 
         <?php
@@ -558,11 +543,9 @@ function display_form($details = [], $errors = []) {
         ?>
         <div class="row">
             <span class="label"><label for="lastname">Your last name:</label></span>
-            <span class="formw"><input type="text" name="lastname" id="lastname"
-                    value="<?php if (isset($details["lastname"])) {
-                        echo htmlentities($details["lastname"]);
-                    } ?>"
-                    maxlength="255" size="30" class="form"></span>
+            <span class="formw"><input type="text" name="lastname" id="lastname" value="<?php if (isset($details["lastname"])) {
+                echo htmlentities($details["lastname"]);
+} ?>" maxlength="255" size="30" class="form"></span>
         </div>
 
         <?php
@@ -572,11 +555,9 @@ function display_form($details = [], $errors = []) {
         ?>
         <div class="row">
             <span class="label"><label for="em">Email address:</label></span>
-            <span class="formw"><input type="text" name="em" id="em"
-                    value="<?php if (isset($details["email"])) {
-                        echo htmlentities($details["email"]);
-                    } ?>" maxlength="255"
-                    size="30" class="form"></span>
+            <span class="formw"><input type="text" name="em" id="em" value="<?php if (isset($details["email"])) {
+                echo htmlentities($details["email"]);
+} ?>" maxlength="255" size="30" class="form"></span>
         </div>
 
         <?php
@@ -615,11 +596,9 @@ function display_form($details = [], $errors = []) {
 
         <br style="clear: left;">&nbsp;<br>
 
-        <span class="formw"><input type="hidden" name="constituency" id="constituency"
-                value="<?php if (isset($details["constituency"])) {
-                    echo htmlentities($details["constituency"]);
-                } ?>"
-                maxlength="20" size="20" class="form"></span>
+        <span class="formw"><input type="hidden" name="constituency" id="constituency" value="<?php if (isset($details["constituency"])) {
+            echo htmlentities($details["constituency"]);
+} ?>" maxlength="20" size="20" class="form"></span>
         <?php
         if (isset($errors["url"])) {
             $PAGE->error_message($errors["url"]);
@@ -627,11 +606,9 @@ function display_form($details = [], $errors = []) {
         ?>
         <div class="row">
             <span class="label"><label for="url">Your website:</label></span>
-            <span class="formw"><input type="url" name="url" id="url"
-                    value="<?php if (isset($details['url'])) {
-                        echo htmlentities($details['url']);
-                    } ?>" maxlength="255"
-                    size="20" class="form"> <small>Optional and public</small></span>
+            <span class="formw"><input type="url" name="url" id="url" value="<?php if (isset($details['url'])) {
+                echo htmlentities($details['url']);
+} ?>" maxlength="255" size="20" class="form"> <small>Optional and public</small></span>
         </div>
 
 
@@ -985,7 +962,7 @@ function display_user($user_id = "") {
             ?>
             <p><strong>This is how other people see you.</strong> <a href="<?php echo $EDITURL->generate(); ?>">Edit your
                     details</a>.</p>
-        <?php
+            <?php
         }
 
         ?>
@@ -1015,20 +992,20 @@ function display_user($user_id = "") {
             ?></span>
                 </div>
 
-<?php
+        <?php
 
-                if (isset($constituency)) {
-                    if ($constituency == '') {
-                        $constituency = 'none';
-                    }
-                    ?>
+        if (isset($constituency)) {
+            if ($constituency == '') {
+                $constituency = 'none';
+            }
+            ?>
                 <div class=" row">&nbsp;<br>
                         <span class="label">Australian Electoral Division</span>
                         <span class="formw"><?php echo htmlentities($constituency); ?> <small>(not public)</small></span>
             </div>
 
             <?php
-                }
+        }
 
                 if (isset($url)) {
                     if ($url == '') {
@@ -1044,43 +1021,44 @@ function display_user($user_id = "") {
             </div>
 
             <?php
-                }
+        }
 
-                if (isset($emailpublic)) {
-                    ?>
+        if (isset($emailpublic)) {
+            ?>
             <div class="row">&nbsp;<br>Let other people see your email address?
-                <strong><?php echo htmlentities($emailpublic); ?></strong></div>
+                <strong><?php echo htmlentities($emailpublic); ?></strong>
+            </div>
 
             <?php
-                }
-                if (isset($optin)) {
-                    ?>
+        }
+        if (isset($optin)) {
+            ?>
             <div class="row">Receive OpenAustralia.org emails? <strong><?php echo htmlentities($optin); ?></strong></div>
 
             <?php
-                }
+        }
 
-                if (isset($status)) {
-                    ?>
+        if (isset($status)) {
+            ?>
             <div class="row">
                 <span class="label">Status</span>
                 <span class="formw"><?php echo htmlentities($status); ?></span>
             </div>
             <?php
-                }
-                if (isset($registrationtime)) {
-                    ?>
+        }
+        if (isset($registrationtime)) {
+            ?>
             <div class="row">
                 <span class="label">Joined</span>
                 <span class="formw"><?php echo htmlentities($registrationtime); ?></span>
             </div>
             <?php
-                }
+        }
 
-                if ($edited && $this_page == 'userviewself') {
-                    $EDITURL = new URL('useredit');
-                    $VIEWURL = new URL('userviewself');
-                    ?>
+        if ($edited && $this_page == 'userviewself') {
+            $EDITURL = new URL('useredit');
+            $VIEWURL = new URL('userviewself');
+            ?>
             <p>&nbsp;<br><a href="<?php echo $EDITURL->generate(); ?>">Edit again</a> or <a
                     href="<?php echo $VIEWURL->generate(); ?>">see how others see you</a>.</p>
             <?php
@@ -1141,20 +1119,50 @@ function display_user($user_id = "") {
                     else {
                         print '<p>You currently have no email alerts set up.</p>';
                     }
-                    $PAGE->stripe_end();
                 }
 
-                if (!$edited) {
+                if (count($search_keywords) > 0) {
+                    if (strpos($search_url, 'pid=') !== FALSE) {
+                        $search_url .= '&';
+                    }
+                    $search_url .= "s=" . join("+", $search_keywords);
+                }
+
+                $display_criteria = join(' ', $display_terms);
+                $token = $row['alert_id'] . '-' . $row['registrationtoken'];
+                if (!$row['confirmed']) {
+                    $action = '<a href="' . WEBPATH . 'A/' . $token . '">Confirm</a>';
+                }
+                elseif ($row['deleted']) {
+                    $action = '<form action="' . WEBPATH . 'alert/undelete/" method="post"><input type="hidden" name="t" value="' . $token . '"><input type="submit" value="Resubscribe"></form>';
+                }
+                else {
+                    $action = '<form action="' . WEBPATH . 'alert/delete/" method="post"><input type="hidden" name="t" value="' . $token . '"><input type="submit" value="Unsubscribe"></form>';
+                }
+                $out .= "<tr><td><a href='" . $search_url . "'>" . $display_criteria . "</a></td><td>" . $action . "</td></tr>";
+            }
+            print '<p>To add a new alert, simply visit a Representative or Senator\'s page or conduct a search &#8212; to be given the option of turning them into alerts automatically &#8212; or visit <a href="' . WEBPATH . 'alert/">the manual addition page</a>.</p>';
+            if ($out) {
+                print '<p>Here are your email alerts:</p>';
+                print '<table cellpadding="3" cellspacing="0"><tr><th>Criteria</th><th>Action</th></tr>' . $out . '</table>';
+            }
+            else {
+                print '<p>You currently have no email alerts set up.</p>';
+            }
+            $PAGE->stripe_end();
+        }
+
+        if (!$edited) {
 
                     $args = [
                         'user_id' => $user_id,
                         'page' => get_http_var('p')
                     ];
 
-                    $COMMENTLIST = new COMMENTLIST();
+            $COMMENTLIST = new COMMENTLIST();
 
-                    $COMMENTLIST->display('user', $args);
-                }
+            $COMMENTLIST->display('user', $args);
+        }
 
     }
     else {
