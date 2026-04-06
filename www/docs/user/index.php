@@ -2,10 +2,10 @@
 
 /**
  * @file
- * We use this same text file for editing a user's details (both THEUSER's and
  */
 
-// A different user's), and letting a new user join.
+// We use this same text file for editing a user's details (both THEUSER's and
+// a different user's), and letting a new user join.
 // This means we can keep all the form validation and display code in one place.
 
 /* What happens?
@@ -27,15 +27,13 @@ In that case the form (or the user info, if just viewing) is displayed.
 After the first part of working out which page we're on, and munging any data
 various functions in this file are used:
 
-check_input()   Validates the edited or added user data and creates error messages.
-add_user()      Calls $THEUSER->add() and displays the results, depending on success.
-update_user()   Calls the appropriate functions and updates, displays results.
-display_form()  Displays the form for editing or adding a user.
-display_user()  Displays a user's details.
+        check_input()    Validates the edited or added user data and creates error messages.
+        add_user()        Calls $THEUSER->add() and displays the results, depending on success.
+        update_user()    Calls the appropriate functions and updates, displays results.
+        display_form()    Displays the form for editing or adding a user.
+        display_user()    Displays a user's details.
 
  */
-
-
 
 include_once "../../includes/easyparliament/init.php";
 include_once "../../includes/easyparliament/member.php";
@@ -43,14 +41,13 @@ include_once "../../includes/easyparliament/member.php";
 // Which page we're on all depends on the value of the "pg" variable...
 switch (get_http_var("pg")) {
 
-    // A new user signing up.
     case "join":
-
+        // A new user signing up.
         $this_page = "userjoin";
       break;
 
-    // Editing someone else's info.
     case "editother":
+        // Editing someone else's info.
 
         // We need a user_id. So make sure that exists.
         // And make sure the user is allowed to do this!
@@ -68,8 +65,8 @@ switch (get_http_var("pg")) {
 
       break;
 
-    // Edit this user's owninfo.
     case "edit":
+        // Edit this user's owninfo.
 
         if ($THEUSER->isloggedin()) {
             $this_page = "useredit";
@@ -98,11 +95,8 @@ switch (get_http_var("pg")) {
         }
 }
 
-
-// A little detail... we want to change text in the page depending on whose
-// info is being changed or added.
+// A little detail... we want to change text in the page depending on whose info is being changed or added.
 $who = $this_page == "otheruseredit" ? "the user's" : "your";
-
 
 if (get_http_var("submitted") == "true") {
     // The edit or join form has been submitted, so check input.
@@ -112,7 +106,7 @@ if (get_http_var("submitted") == "true") {
     $details["firstname"] = trim(get_http_var("firstname"));
     $details["lastname"] = trim(get_http_var("lastname"));
     $details["email"] = trim(get_http_var("em"));
-    // We use boolean true/false internally. Convert the text from the form to boolean.
+    // We use boolean TRUE/FALSE internally. Convert the text from the form to boolean.
     $details["emailpublic"] = get_http_var("emailpublic") == "true" ? TRUE : FALSE;
     $details["password"] = trim(get_http_var("password"));
     $details["password2"] = trim(get_http_var("password2"));
@@ -156,7 +150,7 @@ if (get_http_var("submitted") == "true") {
     // and the values will be text to display when we show the form again.
     $errors = check_input($details);
 
-    if (sizeof($errors) > 0) {
+    if (count($errors) > 0) {
         // Validation errors. Print form again.
 
         $PAGE->page_start();
@@ -179,22 +173,13 @@ if (get_http_var("submitted") == "true") {
         update_user($details);
 
     }
-
-
-
 }
 else {
     // THEUSER has just arrived at this page, no form submitted.
-
-
     if ($this_page == "userview" || $this_page == 'userviewself') {
-
         display_user();
-
     }
     else {
-
-
         $PAGE->page_start();
 
         if ($this_page == "useredit") {
@@ -219,8 +204,7 @@ else {
         elseif ($this_page == "otheruseredit") {
 
             // We're editing the info of a different user.
-            // So set up a new user object with the id supplied
-            // and get the user's info.
+            // So set up a new user object with the id supplied and get the user's info.
 
             $USER = new USER();
             $USER->init(get_http_var("u"));
@@ -252,14 +236,12 @@ else {
 
         }
 
-
         $PAGE->page_end();
     }
 
 }
 
 /**
- *
  */
 function check_input($details) {
     global $THEUSER, $this_page, $who;
@@ -288,7 +270,7 @@ function check_input($details) {
 
     }
     elseif (!validate_email($details["email"])) {
-        // validate_email() is in includes/utilities.php.
+        // Oh, validate_email() is in includes/utilities.php.
         $errors["email"] = "Please enter a valid email address";
 
     }
@@ -356,13 +338,9 @@ function check_input($details) {
     }
 
     // No checking of URL.
-
     if ($this_page == "otheruseredit") {
-
         // We're editing another user's info.
-
         // Could check status here...?
-
     }
 
     // Send the array of any errors back...
@@ -370,7 +348,6 @@ function check_input($details) {
 }
 
 /**
- *
  */
 function add_user($details) {
     global $THEUSER, $PAGE, $this_page;
@@ -398,8 +375,8 @@ function add_user($details) {
 
         $PAGE->stripe_end();
 
-        /*      We used to log the user in straight away.
-        Now we send them a confirmation email.
+        /*        We used to log the user in straight away.
+                Now we send them a confirmation email.
 
         Keeping this code here, just in case.
         Note that you'll probably have to add the 'remember' checkbox
@@ -420,29 +397,15 @@ function add_user($details) {
         // where before joining.
         if (get_http_var("ret") != "") {
 
-        $url = get_http_var("ret");
-        // We're now going to have to fudge things a bit. Want to add "newuser=1"
-        // on to the end of wherever we were before, so a welcome message will
-        // be displayed.
-        if (preg_match("/\?.+/", $url)) {
-        $url .= "&newuser=1";
-        } else {
-        $url .= "?newuser=1";
-        }
+                    $URL = new URL("home");
+                    $URL->insert(["newuser"=>"1"]);
+                    $url = $URL->generate();
+                }
 
-        } else {
-        // We'll send the user to the front page after they've joined.
-
-        $URL = new URL("home");
-        $URL->insert(array("newuser"=>"1"));
-        $url = $URL->generate();
-        }
-
-        // Log the new user in. They'll be sent off elsewhere, so we don't output any
-        // HTML here.
-        $THEUSER->login($url, $expire);
-
-         */
+                // Log the new user in. They'll be sent off elsewhere, so we don't output any
+                // HTML here.
+                $THEUSER->login($url, $expire);
+        */
 
     }
     else {
@@ -463,7 +426,6 @@ function add_user($details) {
 }
 
 /**
- *
  */
 function update_user($details) {
     global $THEUSER, $this_page, $PAGE, $who;
@@ -501,7 +463,6 @@ function update_user($details) {
         }
 
         display_user($user_id);
-
     }
     else {
         // Something went wrong.
@@ -514,11 +475,9 @@ function update_user($details) {
 
         $PAGE->page_end();
     }
-
 }
 
 /**
- *
  */
 function display_form($details = [], $errors = []) {
     global $this_page, $THEUSER, $who, $PAGE;
@@ -689,10 +648,10 @@ function display_form($details = [], $errors = []) {
         <div class="row">
             &nbsp;<br>Do <?php if ($this_page == "otheruseredit") {
                 echo "they";
-}
-                         else {
-                             echo "you";
-                         } ?> wish to receive
+            }
+            else {
+                echo "you";
+            } ?> wish to receive
             occasional update emails about OpenAustralia.org?
         </div>
 
@@ -724,10 +683,10 @@ function display_form($details = [], $errors = []) {
             <div class="row">
                 &nbsp;<br>Would <?php if ($this_page == "otheruseredit") {
                     echo "they";
-}
-                                else {
-                                    echo "you";
-                                } ?> like to
+                }
+                else {
+                    echo "you";
+                } ?> like to
                 receive an email whenever your MP does something in Parliament?
                 <br /><small>&nbsp;&nbsp;(if you're already getting email alerts to your address, don't worry about
                     this)</small>
@@ -865,26 +824,26 @@ function display_form($details = [], $errors = []) {
 } // End display_form()
 
 /**
+ * Display user details.
  *
+ * We're either going to be:
+ *   Displaying the details of a user who's just been edited
+ *     (their user_id will be in $user_id now).
+ *   Viewing THEUSER's own data.
+ *   Viewing someone else's data
+ *     (their id will be in the GET string user_id variable).
+ *
+ * We could do something cleverer so that if THEUSER has sufficient
+ * privileges we display more data when they're viewing someone else's info
+ * than what your average punter sees.
+ *
+ * If $user_id is a user id, we've just edited that user's info.
+ *
+ * FIRST: Work out whose info we're going to show.
  */
 function display_user($user_id = "") {
 
     global $THEUSER, $PAGE, $DATA, $this_page, $who;
-
-    // We're either going to be:
-    //  Displaying the details of a user who's just been edited
-    //      (their user_id will be in $user_id now).
-    //  Viewing THEUSER's own data.
-    //  Viewing someone else's data (their id will be in the GET string
-    //      user_id variable).
-
-    // We could do something cleverer so that if THEUSER has sufficient
-    // privileges we display more data when they're viewing someone else's info
-    // than what your average punter sees.
-
-    // If $user_id is a user id, we've just edited that user's info.
-
-    // FIRST: Work out whose info we're going to show.
 
     // Have we just edited someone's info?
     $edited = FALSE;
@@ -893,25 +852,21 @@ function display_user($user_id = "") {
         // Display this user's just edited info.
         $display = "this user";
         $edited = TRUE;
-
     }
     elseif (is_numeric($user_id)) {
         // Display someone else's just edited info.
         $display = "another user";
         $edited = TRUE;
-
     }
     elseif (is_numeric(get_http_var("u"))) {
         // Display someone else's info.
         $user_id = get_http_var("u");
         $display = "another user";
-
     }
     elseif ($THEUSER->isloggedin()) {
         // Display this user's info.
         $display = "this user";
         $user_id = $THEUSER->user_id();
-
     }
     else {
         // Nothing to show!
@@ -920,7 +875,6 @@ function display_user($user_id = "") {
         $loginurl = $URL->generate();
         header("Location: $loginurl");
         exit;
-
     }
 
     // SECOND: Get the data for whoever we're going to show.
@@ -983,13 +937,10 @@ function display_user($user_id = "") {
 
     }
     else {
-
         // There's nothing to display!
-
     }
 
     // THIRD: Print out what we've got.
-
     $PAGE->page_start();
 
     if ($display != "none") {
@@ -1056,14 +1007,14 @@ function display_user($user_id = "") {
             <?php
         }
 
-        if (isset($url)) {
-            if ($url == '') {
-                $url = 'none';
-            }
-            else {
-                $url = '<a href="' . htmlentities($url) . '">' . htmlentities($url) . '</a>';
-            }
-            ?>
+                if (isset($url)) {
+                    if ($url == '') {
+                        $url = 'none';
+                    }
+                    else {
+                        $url = '<a href="' . htmlentities($url) . '">' . htmlentities($url) . '</a>';
+                    }
+                    ?>
             <div class="row">
                 <span class="label">Website</span>
                 <span class="formw"><?php echo $url; ?></span>
@@ -1111,32 +1062,62 @@ function display_user($user_id = "") {
             <p>&nbsp;<br><a href="<?php echo $EDITURL->generate(); ?>">Edit again</a> or <a
                     href="<?php echo $VIEWURL->generate(); ?>">see how others see you</a>.</p>
             <?php
-        }
+                }
 
-        $PAGE->stripe_end();
+                $PAGE->stripe_end();
 
-        // Email alerts.
-        if ($this_page == 'userviewself') {
-            $PAGE->stripe_start();
-            print '<h3>Your email alerts</h3>';
-            $db = new ParlDB();
-            $q = $db->query('SELECT * FROM alerts WHERE email = "' . $db->escape($THEUSER->email()) . '" ORDER BY confirmed,deleted,alert_id');
-            $out = '';
-            for ($i = 0; $i < $q->rows(); ++$i) {
-                $row = $q->row($i);
-                $alert_criteria_terms = explode(' ', $row['criteria']);
-                $display_terms = [];
-                $search_keywords = [];
-                $search_url = WEBPATH . "search/?";
-                foreach ($alert_criteria_terms as $criteria_term) {
-                    if (preg_match('#^speaker:(\d+)#', $criteria_term, $m)) {
-                        $MEMBER = new MEMBER(['person_id' => $m[1]]);
-                        $display_terms[] = 'spoken by ' . $MEMBER->full_name();
-                        $search_url .= 'pid=' . $MEMBER->person_id();
+                // Email alerts.
+                if ($this_page == 'userviewself') {
+                    $PAGE->stripe_start();
+                    print '<h3>Your email alerts</h3>';
+                    $db = new ParlDB();
+                    $q = $db->query('SELECT * FROM alerts WHERE email = "' . mysqli_real_escape_string($db, $THEUSER->email()) . '" ORDER BY confirmed,deleted,alert_id');
+                    $out = '';
+                    for ($i = 0; $i < $q->rows(); ++$i) {
+                        $row = $q->row($i);
+                        $alert_criteria_terms = explode(' ', $row['criteria']);
+                        $display_terms = [];
+                        $search_keywords = [];
+                        $search_url = WEBPATH . "search/?";
+                        foreach ($alert_criteria_terms as $criteria_term) {
+                            if (preg_match('#^speaker:(\d+)#', $criteria_term, $m)) {
+                                $MEMBER = new MEMBER(['person_id' => $m[1]]);
+                                $display_terms[] = 'spoken by ' . $MEMBER->full_name();
+                                $search_url .= 'pid=' . $MEMBER->person_id();
+                            }
+                            else {
+                                $display_terms[] = $criteria_term;
+                                $search_keywords[] = $criteria_term;
+                            }
+                        }
+
+                        if (count($search_keywords) > 0) {
+                            if (strpos($search_url, 'pid=') !== FALSE) {
+                                $search_url .= '&';
+                            }
+                            $search_url .= "s=" . implode("+", $search_keywords);
+                        }
+
+                        $display_criteria = implode(' ', $display_terms);
+                        $token = $row['alert_id'] . '-' . $row['registrationtoken'];
+                        if (!$row['confirmed']) {
+                            $action = '<a href="' . WEBPATH . 'A/' . $token . '">Confirm</a>';
+                        }
+                        elseif ($row['deleted']) {
+                            $action = '<form action="' . WEBPATH . 'alert/undelete/" method="post"><input type="hidden" name="t" value="' . $token . '"><input type="submit" value="Resubscribe"></form>';
+                        }
+                        else {
+                            $action = '<form action="' . WEBPATH . 'alert/delete/" method="post"><input type="hidden" name="t" value="' . $token . '"><input type="submit" value="Unsubscribe"></form>';
+                        }
+                        $out .= "<tr><td><a href='" . $search_url . "'>" . $display_criteria . "</a></td><td>" . $action . "</td></tr>";
+                    }
+                    print '<p>To add a new alert, simply visit a Representative or Senator\'s page or conduct a search &#8212; to be given the option of turning them into alerts automatically &#8212; or visit <a href="' . WEBPATH . 'alert/">the manual addition page</a>.</p>';
+                    if ($out) {
+                        print '<p>Here are your email alerts:</p>';
+                        print '<table cellpadding="3" cellspacing="0"><tr><th>Criteria</th><th>Action</th></tr>' . $out . '</table>';
                     }
                     else {
-                        $display_terms[] = $criteria_term;
-                        $search_keywords[] = $criteria_term;
+                        print '<p>You currently have no email alerts set up.</p>';
                     }
                 }
 
@@ -1173,10 +1154,10 @@ function display_user($user_id = "") {
 
         if (!$edited) {
 
-            $args = [
-                'user_id' => $user_id,
-                'page' => get_http_var('p')
-            ];
+                    $args = [
+                        'user_id' => $user_id,
+                        'page' => get_http_var('p')
+                    ];
 
             $COMMENTLIST = new COMMENTLIST();
 
